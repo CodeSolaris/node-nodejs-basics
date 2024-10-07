@@ -1,6 +1,16 @@
-const spawnChildProcess = async (args) => {
-    // Write your code here
+import { spawn } from "child_process";
+
+const scriptPath = "./src/cp/files/script.js";
+
+export const spawnChildProcess = async (args) => {
+    const child = spawn("node", [scriptPath, ...args], {
+        stdio: ["pipe", "pipe", "pipe", "ipc"],
+    });
+
+    process.stdin.pipe(child.stdin);
+    child.stdout.pipe(process.stdout);
+    child.stdin.write("CLOSE");
 };
 
-// Put your arguments in function call to test this functionality
-spawnChildProcess( /* [someArgument1, someArgument2, ...] */);
+// Пример использования
+spawnChildProcess(["arg1", "arg2"]);
